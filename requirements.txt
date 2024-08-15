@@ -1,0 +1,13 @@
+
+
+rdflib>=7.0.0
+SPARQLWrapper>=2.0.0
+requests>=2.0.0
+
+
+
+
+
+
+
+
