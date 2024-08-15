@@ -13,8 +13,7 @@ sparql.setReturnFormat(JSON)
 sparql.setQuery("""
     PREFIX gts: <http://resource.geosciml.org/ontology/timescale/gts#>
 
-    SELECT *
-    WHERE {
+    SELECT * WHERE {
         ?a a gts:Age .
     }
     ORDER BY ?a
@@ -29,21 +28,3 @@ try:
         print(r)
 except Exception as e:
     print(e)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
