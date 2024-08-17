@@ -1,2 +1,2 @@
-# RDF-Database-Template
-A template for a local RDF database
+# RDF-API-Tool
+An self hosted API toolfor using RDF as database
