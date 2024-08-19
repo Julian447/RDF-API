@@ -1,4 +1,5 @@
-import rdflib.graph
+import rdflib.graph 
+import json
 
 # implement search through graph names
 # keep a document with all paths of all graphs in use
@@ -11,7 +12,8 @@ def run_query(graphname, query):
 
     graph = rdflib.Graph()
 
-    graph.parse(get_graph(graphname), format="ttl")
+    graph.parse(get_graph(graphname))
+    # v = graph.serialize(format="json-ld")
 
     qres = graph.query(query)
 
@@ -24,8 +26,8 @@ query = """
     PREFIX log: <http://example.org/ont/transaction-log/> 
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
 
-    SELECT * WHERE {
-        ?a a log:Transaction .
+    SELECT DISTINCT ?a ?b WHERE {
+        ?a a ?b .
     }
     ORDER BY ?a
     LIMIT 3
@@ -34,6 +36,8 @@ query = """
 qres = run_query("test", query)
 
 
-for row in qres:
-    print(f"{row.a} is a transaction")
+# for row in qres:
+#     print(row)
+
+print(qres.serialize(format="json"))
 

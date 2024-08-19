@@ -1,9 +1,28 @@
 
 import uvicorn
 from fastapi import FastAPI
+from read_query import run_query
 
 app = FastAPI()
 
+@app.get("/")
+async def test():
+    query = """
+        PREFIX txn: <http://example.org/data/transaction/> 
+        PREFIX srv: <http://example.org/data/server/> 
+        PREFIX log: <http://example.org/ont/transaction-log/> 
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+        SELECT DISTINCT ?a ?b WHERE {
+            ?a a ?b .
+        }
+        ORDER BY ?a
+        LIMIT 3
+        """
+
+    res = run_query("graphtest.ttl", query)
+    res.serialize(format="json")
+    return res
 
 # should this actually have endpoint?
 @app.get("/create_graph/{graph_name}")
