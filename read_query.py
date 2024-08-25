@@ -12,25 +12,35 @@ def run_query(graphname, query):
 
     graph = rdflib.Graph()
 
-    graph.parse(get_graph(graphname))
+    graph.parse(f'graphs/{graphname}.ttl')
     # v = graph.serialize(format="json-ld")
 
     qres = graph.query(query)
+    # print(graph.serialize())
+    return graph
 
-    return qres
 
 
+# below exists to run this file by itself 
+
+# query = """
+#     PREFIX txn: <http://example.org/data/transaction/> 
+#     PREFIX srv: <http://example.org/data/server/> 
+#     PREFIX log: <http://example.org/ont/transaction-log/> 
+#     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+#
+#     SELECT DISTINCT ?a ?b WHERE {
+#         ?a a ?b .
+#     }
+#     ORDER BY ?a
+#     LIMIT 3
+#     """
 query = """
-    PREFIX txn: <http://example.org/data/transaction/> 
-    PREFIX srv: <http://example.org/data/server/> 
-    PREFIX log: <http://example.org/ont/transaction-log/> 
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+    PREFIX t: <test.ttl>
 
-    SELECT DISTINCT ?a ?b WHERE {
-        ?a a ?b .
+    SELECT ?a ?b WHERE {
+        ?a a ?b
     }
-    ORDER BY ?a
-    LIMIT 3
     """
 
 qres = run_query("test", query)
@@ -39,5 +49,6 @@ qres = run_query("test", query)
 # for row in qres:
 #     print(row)
 
-print(qres.serialize(format="json"))
+# print(qres.serialize(format="json"))
+print(qres.serialize())
 

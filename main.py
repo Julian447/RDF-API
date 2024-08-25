@@ -2,6 +2,14 @@
 import uvicorn
 from fastapi import FastAPI
 from read_query import run_query
+from create_query import create_nodes
+
+from rdflib import Graph
+from pydantic import BaseModel
+
+class TestClass(BaseModel):
+    jsonstring: str
+
 
 app = FastAPI()
 
@@ -20,19 +28,22 @@ async def test():
         LIMIT 3
         """
 
-    res = run_query("graphtest.ttl", query)
+    res = run_query("graphtest", query)
     res.serialize(format="json")
     return res
 
 # should this actually have endpoint?
 @app.get("/create_graph/{graph_name}")
-async def create_graph():
-    return {"Hello": "World"}
+async def create_graph(graph_name: str):
+    #should this even be an endpoint?
+    return {"Graph": graph_name}
 
 # should this actually have endpoint?
-@app.get("/{graph_name}/create_item/{item_id}")
-async def create_item():
-    return {"Hello": "World"}
+@app.post("/{graph_name}/create_item/")
+async def create_item(graph_name : str, item_id : TestClass):
+    create_nodes(graph_name, item_id.jsonstring)
+    # return {"Hello": "World"}
+    return True
 
 @app.get("/get_graph/{graph_name}")
 async def get_graph():
