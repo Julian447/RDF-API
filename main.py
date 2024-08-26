@@ -2,13 +2,17 @@
 import uvicorn
 from fastapi import FastAPI
 from read_query import run_query
-from create_query import create_nodes
+from create_query import create_nodes, process_new_nodes
 
 from rdflib import Graph
 from pydantic import BaseModel
 
+class Triple(BaseModel):
+    sub:str
+    pred:str
+    obj:str
 class TestClass(BaseModel):
-    jsonstring: str
+    triples:list[Triple]
 
 
 app = FastAPI()
@@ -41,7 +45,8 @@ async def create_graph(graph_name: str):
 # should this actually have endpoint?
 @app.post("/{graph_name}/create_item/")
 async def create_item(graph_name : str, item_id : TestClass):
-    create_nodes(graph_name, item_id.jsonstring)
+    graph = process_new_nodes("test")
+    create_nodes(graph_name, graph)
     # return {"Hello": "World"}
     return True
 
