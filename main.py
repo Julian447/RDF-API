@@ -1,7 +1,12 @@
 
 import uvicorn
 from fastapi import FastAPI
-from read_query import run_query
+from rdf_api.read_query import run_query
+from rdf_api.create_query import process_new_nodes
+
+from rdf_api.datastructure.triple_structure import TripleList, Triple
+
+
 
 app = FastAPI()
 
@@ -20,19 +25,33 @@ async def test():
         LIMIT 3
         """
 
-    res = run_query("graphtest.ttl", query)
+    res = run_query("graphtest", query)
     res.serialize(format="json")
     return res
 
 # should this actually have endpoint?
 @app.get("/create_graph/{graph_name}")
-async def create_graph():
-    return {"Hello": "World"}
+async def create_graph(graph_name: str):
+    #should this even be an endpoint?
+    return {"Graph": graph_name}
 
 # should this actually have endpoint?
-@app.get("/{graph_name}/create_item/{item_id}")
-async def create_item():
-    return {"Hello": "World"}
+# @app.post("/{graph_name}/create_item/")
+# async def create_item(graph_name : str, item_json : str):
+#     try:
+#         item = TripleList.model_validate_json(item_json)
+#         graph = process_new_nodes("test", item)
+#         create_nodes(graph_name, graph)
+#         # return {"Hello": "World"}
+#         return True
+#     except ValidationError:
+#         return False
+
+@app.post("/{graph_name}/create_item/")
+async def create_item(graph_name : str, item: TripleList):
+    process_new_nodes(graph_name, item)
+    # return {"Hello": "World"}
+    return True
 
 @app.get("/get_graph/{graph_name}")
 async def get_graph():
@@ -43,7 +62,6 @@ async def get_graph():
 #!      Need to set up custom objects which return only desired output (i.e. subject predicate or object)
 @app.get("/{graph_name}/get_item/{item_query}")
 async def get_item(graph_name: str, item_query: str):
-
     return {"Hello": "World"}
 
 
