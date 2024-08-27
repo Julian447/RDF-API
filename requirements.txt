@@ -3,8 +3,8 @@
 rdflib>=7.0.0
 SPARQLWrapper>=2.0.0
 requests>=2.0.0
-
-
+fastapi[standard]>=0.112.0
+uvicorn>=0.30.6
 
 
 

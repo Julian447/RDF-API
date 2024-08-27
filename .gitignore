@@ -1,5 +1,9 @@
 
 
 # folders
-env/
+venv/
+
+#pydantic
+__pycache__/
+__pycache__
 
