@@ -1,18 +1,11 @@
 
 import uvicorn
 from fastapi import FastAPI
-from read_query import run_query
-from create_query import create_nodes, process_new_nodes
+from rdf_api.read_query import run_query
+from rdf_api.create_query import process_new_nodes
 
-from rdflib import Graph
-from pydantic import BaseModel
+from rdf_api.datastructure.triple_structure import TripleList, Triple
 
-class Triple(BaseModel):
-    sub:str
-    pred:str
-    obj:str
-class TestClass(BaseModel):
-    triples:list[Triple]
 
 
 app = FastAPI()
@@ -43,10 +36,20 @@ async def create_graph(graph_name: str):
     return {"Graph": graph_name}
 
 # should this actually have endpoint?
+# @app.post("/{graph_name}/create_item/")
+# async def create_item(graph_name : str, item_json : str):
+#     try:
+#         item = TripleList.model_validate_json(item_json)
+#         graph = process_new_nodes("test", item)
+#         create_nodes(graph_name, graph)
+#         # return {"Hello": "World"}
+#         return True
+#     except ValidationError:
+#         return False
+
 @app.post("/{graph_name}/create_item/")
-async def create_item(graph_name : str, item_id : TestClass):
-    graph = process_new_nodes("test")
-    create_nodes(graph_name, graph)
+async def create_item(graph_name : str, item: TripleList):
+    process_new_nodes(graph_name, item)
     # return {"Hello": "World"}
     return True
 
@@ -59,7 +62,6 @@ async def get_graph():
 #!      Need to set up custom objects which return only desired output (i.e. subject predicate or object)
 @app.get("/{graph_name}/get_item/{item_query}")
 async def get_item(graph_name: str, item_query: str):
-
     return {"Hello": "World"}
 
 

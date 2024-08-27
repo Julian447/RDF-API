@@ -17,7 +17,7 @@ def run_query(graphname, query):
 
     qres = graph.query(query)
     # print(graph.serialize())
-    return graph
+    return qres
 
 
 
@@ -35,20 +35,20 @@ def run_query(graphname, query):
 #     ORDER BY ?a
 #     LIMIT 3
 #     """
-query = """
-    PREFIX t: <test.ttl>
-
-    SELECT ?a ?b WHERE {
-        ?a a ?b
-    }
-    """
-
-qres = run_query("test", query)
+# query = """
+#     PREFIX t: <test.ttl>
+#
+#     SELECT ?a ?b WHERE {
+#         ?a a ?b
+#     }
+#     """
+#
+# qres = run_query("test", query)
 
 
 # for row in qres:
 #     print(row)
 
 # print(qres.serialize(format="json"))
-print(qres.serialize())
+# print(qres.serialize())
 

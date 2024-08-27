@@ -1,9 +1,0 @@
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix s: <file://test.ttl/> .
-
-s:test a s:test ;
-    foaf:name s:test .
-
-s:test2 a s:test2 ;
-    foaf:name s:test2 .
-
