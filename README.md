@@ -2,6 +2,7 @@
 An self hosted API toolfor using RDF as database
 
 ## Setup
+Run the "setup.sh" script or use the following commands:
 ```
 python -m venv venv
 source venv/bin/activate
@@ -9,14 +10,9 @@ pip install -r requirements.txt
 ```
 
 ## Run
+Either run the "start_api.sh" script or directly from "main.py"
+**remember to replace host and port with your preferred ones**
 
-```
-python main.py
-```
-If running on linux, use this to run as background process
-```
-python main.py &
-```
 This can also be directly run from uvicorn:
 ```
 uvicorn main:app --reload --host "INSERT HOST" --port INSERT PORT
