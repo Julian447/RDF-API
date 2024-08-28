@@ -11,12 +11,17 @@ pip install -r requirements.txt
 ## Run
 
 ```
-uvicorn main:app --reload --host "INSERT HOST" --port INSERT PORT
+python main.py
 ```
 If running on linux, use this to run as background process
 ```
-uvicorn main:app --reload --host "INSERT HOST" --port INSERT PORT &
+python main.py &
 ```
+This can also be directly run from uvicorn:
+```
+uvicorn main:app --reload --host "INSERT HOST" --port INSERT PORT
+```
+
 
 ## Usage
 Any project which interacts with the api needs to do one of:
