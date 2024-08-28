@@ -1,10 +1,6 @@
 from rdflib import Graph, URIRef, BNode, Literal
 from rdflib import Namespace
-from rdflib.namespace import CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG, OWL, \
-                           PROF, PROV, RDF, RDFS, SDO, SH, SKOS, SOSA, SSN, TIME, \
-                           VOID, XMLNS, XSD, URIPattern
 from rdf_api.datastructure.triple_structure import Triple, TripleList
-from pydantic import BaseModel
 
 
 
@@ -49,29 +45,3 @@ def process_new_nodes(graph_name:str, triples:TripleList):
     print(g.serialize(f'graphs/{graph_name}.ttl', format="turtle"))    
     return g
 
-
-
-# ---------------------------Stuff to run script individually --------------------------
-
-# graph_name = "test"
-# t1= Triple(
-#     sub = "test",
-#     sub_namespace=f'file://{graph_name}.ttl/',
-#     pred=RDF.type,
-#     obj= "test",
-#     obj_namespace=f'{graph_name}.ttl/'
-# )
-#
-# t2= Triple(
-#     sub = "test2",
-#     sub_namespace=f'file://{graph_name}.ttl/',
-#     pred=RDF.type,
-#     obj= "test2",
-#     obj_namespace=f'{graph_name}.ttl/'
-# )
-#
-# t : list[Triple] = [t1,t2]
-#
-#
-# test = TripleList(triples=t)
-# g = process_new_nodes(graph_name, test)

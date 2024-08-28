@@ -1,11 +1,8 @@
 
-from rdflib import Graph, URIRef, BNode, Literal
-from rdflib import Namespace
 from rdflib.namespace import CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG, OWL, \
                            PROF, PROV, RDF, RDFS, SDO, SH, SKOS, SOSA, SSN, TIME, \
                            VOID, XMLNS, XSD, URIPattern
 import requests
-from pydantic import BaseModel
 from rdf_api.datastructure.triple_structure import TripleList, Triple
 
 
@@ -66,7 +63,7 @@ test = TripleList(triples=t).model_dump_json()
 
 # print(test)
 
-
+print(test)
 r = requests.post("http://0.0.0.0:8000/test/create_item", test)
 print(r)
 
