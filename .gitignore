@@ -1,6 +1,8 @@
 
+# Environment Variables
+*/.env/*
 
-# folders
+# virtual environment
 venv/
 
 #pydantic

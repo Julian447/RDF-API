@@ -1,3 +1,5 @@
+import os
+from dotenv import dotenv_values
 
 import uvicorn
 from fastapi import FastAPI
@@ -40,10 +42,7 @@ async def list_graphs():
     return {"Hello": "World"}
 
 
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
+# if __name__ == "__main__":
+#     uvicorn.run(app, host=cfg["HOST"], port=cfg["PORT"])
 
 
