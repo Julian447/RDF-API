@@ -28,12 +28,16 @@ query = """
 # print(q.model_dump())
 
 json = q.model_dump_json()
-print(json)
+# print(json)
 # print(f"\n{Query.model_validate_json(json)}")
 
-r = requests.post("http://0.0.0.0:8000/graphtest/get_item/", json)
+r = requests.post("http://0.0.0.0:5000/graphtest/get_item/", data=json, 
+                  headers= {
+                  "Authorization": "Bearer 6308998a8fa656a803ceefe2efabbd7416c2a5f23aabc2f8ad5e2bc218208431"
+                  })
 print(r)
-
+print(r.json())
+# print(r.headers)
 
 
 

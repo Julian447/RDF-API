@@ -1,0 +1,23 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix usr: <file://users.ttl/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+usr:User a rdfs:Class .
+
+usr:Nistec a usr:User ;
+    usr:name "Nistec"^^xsd:string ;
+    usr:password "hashedtest"^^xsd:string ;
+    usr:passwordHash "hashed"^^xsd:string .
+
+usr:name a rdfs:Literal ;
+    rdfs:domain usr:User ;
+    rdfs:range xsd:string .
+
+usr:password a rdfs:Property ;
+    rdfs:domain usr:User ;
+    rdfs:range xsd:string .
+
+usr:passwordHash a rdfs:Property ;
+    rdfs:domain usr:User ;
+    rdfs:range xsd:string .
+
