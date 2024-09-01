@@ -14,30 +14,35 @@ query = """
     }
     """.replace("?a", "txn:123")
 )
-# print(q.query)
-
-# res = run_query("graphtest", query)
-# r = res.serialize()
-
-# print(r)
-# print(res.serialize(format="json"))
-
-# for row in res:
-#     print(f"Sub: txn:123 \nPred: {row.c}\nObj: {row.b}")
-#     print("\n")
-# print(q.model_dump())
 
 json = q.model_dump_json()
-# print(json)
-# print(f"\n{Query.model_validate_json(json)}")
+
+
+token_headers = {
+    'accept': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
+}
+
+token_data = {
+    'grant_type': 'password',
+    'username': 'Nistec',
+    'password': 'hashedtest',
+    'scope': '',
+    'client_id': 'string',
+    'client_secret': 'string',
+}
+
+token_res = requests.post("http://0.0.0.0:5000/token", data=token_data, headers=token_headers)
+print(token_res)
+print(token_res.json())
+token = token_res.json()["access_token"]
 
 r = requests.post("http://0.0.0.0:5000/graphtest/get_item/", data=json, 
                   headers= {
-                  "Authorization": "Bearer 6308998a8fa656a803ceefe2efabbd7416c2a5f23aabc2f8ad5e2bc218208431"
+                  "Authorization": f"Bearer {token}"
                   })
 print(r)
 print(r.json())
-# print(r.headers)
 
 
 
