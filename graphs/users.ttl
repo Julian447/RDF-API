@@ -9,7 +9,7 @@ usr:Nistec a usr:User ;
     usr:password "hashedtest"^^xsd:string ;
     usr:passwordHash "hashed"^^xsd:string .
 
-usr:name a rdfs:Literal ;
+usr:name a rdfs:Property ;
     rdfs:domain usr:User ;
     rdfs:range xsd:string .
 

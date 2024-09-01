@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Annotated
+from typing import Annotated, Optional
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.responses import PlainTextResponse
 from fastapi.security import OAuth2PasswordBearer
@@ -21,16 +21,17 @@ class Authentication:
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
             )
-        decoded = self.decode_token(token)
+        # decoded = self.decode_token(token)
+        decoded = token
         if not decoded:
             raise credentials_exception
         return decoded
 
-    def encode_token(self, username:str, id:int, expires_delta:timedelta):
+    def encode_token(self, username:str, expires_delta:Optional[timedelta] = None  ):
         if expires_delta:
             expire = datetime.now(timezone.utc) + expires_delta
         else:
-            expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+            expire = datetime.now(timezone.utc) + timedelta(minutes=int(self.__cfg["JWT_EXPIRE"]))
 
         return jwt.encode({
             "user" : username,

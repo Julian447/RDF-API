@@ -1,5 +1,7 @@
 import os
 from dotenv import dotenv_values
+from rdflib import Literal
+from rdflib.namespace import XSD
 import uvicorn
 from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException
@@ -65,16 +67,38 @@ class User(BaseModel):
 
 class UserInDB(User):
     hashed_password: str
-u = UserInDB(username="Nistec", hashed_password="hashedpass")
+u = UserInDB(username="Nistec", hashed_password="hashedtest")
 
 
-@app.get("/token")
+@app.post("/token")
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    if not u:
+    data = UserInDB(username=form_data.username, hashed_password=form_data.password)
+    q = Query(
+    query = """
+
+        PREFIX usr: <file://users.ttl/> 
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+        SELECT * WHERE {
+            usr:username a usr:User ;
+                usr:name ?usrname ;
+                usr:password ?passwd
+        }
+        """.replace("username", data.username)
+    )
+    print(q.query)
+    res = run_query("users",q)
+
+    res_usr = UserInDB(username="", hashed_password="")
+    for row in res:
+        print(f'Login attempt from User: {row.usrname}')
+        res_usr = UserInDB(username=row.usrname, hashed_password=row.passwd)
+
+    if not (data == res_usr):
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     
-    # token = auth.encode_token()
-    return {"access_token": u.username, "token_type": "bearer"}
+    # token = auth.encode_token(res_usr.username)
+    return {"access_token": res_usr.username, "token_type": "bearer"}
 
 
 if __name__ == "__main__":
