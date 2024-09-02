@@ -11,7 +11,6 @@ from rdf_api.datastructure.triple_structure import TripleList
 from rdf_api.datastructure.query_structure import Query
 from rdf_api.datastructure.user_structure import UserInDB, User
 from auth import Authentication
-from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -79,8 +78,8 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     if not (data == res_usr):
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     
-    # token = auth.encode_token(res_usr.username)
-    return {"access_token": res_usr.username, "token_type": "bearer"}
+    token = auth.encode_token(res_usr.username)
+    return {"access_token": token, "token_type": "bearer"}
 
 
 

@@ -21,21 +21,20 @@ class Authentication:
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
             )
-        # decoded = self.decode_token(token)
-        decoded = token
+        decoded = self.decode_token(token)
+        # decoded = token
         if not decoded:
             raise credentials_exception
         return decoded
 
     def encode_token(self, username:str, expires_delta:Optional[timedelta] = None  ):
         if expires_delta:
-            expire = datetime.now(timezone.utc) + expires_delta
+            expire = (datetime.now(timezone.utc) + expires_delta).isoformat()
         else:
-            expire = datetime.now(timezone.utc) + timedelta(minutes=int(self.__cfg["JWT_EXPIRE"]))
+            expire = (datetime.now(timezone.utc) + timedelta(minutes=int(self.__cfg["JWT_EXPIRE"]))).isoformat()
 
         return jwt.encode({
-            "user" : username,
-            "id" : id,
+            "user" : username, 
             "expire": expire
             }, key=self.__cfg["JWT_SECRET"], algorithm=self.__cfg["JWT_ALGO"])
         
@@ -43,7 +42,8 @@ class Authentication:
     def decode_token(self, token: str) -> dict |None:
         try:
             payload = jwt.decode(token, self.__cfg["JWT_SECRET"], algorithms=[self.__cfg["JWT_ALGO"]])
-            # if something
+            if any(x not in payload for x in ["user", "expire"]):
+                return None
             return payload
         except InvalidTokenError:
             return None
