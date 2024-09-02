@@ -1,23 +1,25 @@
-from dotenv import dotenv_values
-import uvicorn
 from typing import Annotated
+
+import uvicorn
+from dotenv import dotenv_values
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from rdf_api.read_query import run_query, get_graph
-from rdf_api.create_query import process_new_nodes
-from rdf_api.datastructure.triple_structure import TripleList
-from rdf_api.datastructure.query_structure import Query
-from rdf_api.datastructure.user_structure import UserInDB, User
 from auth import Authentication
+from rdf_api.create_query import process_new_nodes
+from rdf_api.datastructure.query_structure import Query
+from rdf_api.datastructure.triple_structure import TripleList
+from rdf_api.datastructure.user_structure import User, UserInDB
+from rdf_api.read_query import get_graph, run_query
 
 app = FastAPI()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+env = dotenv_values(".env")
 
-auth = Authentication(dotenv_values(".env"))
+auth = Authentication(env)
 
 
 
@@ -29,7 +31,6 @@ async def test():
 @app.post("/{graph_name}/create_item/")
 async def create_item(graph_name : str, item: TripleList, token: Annotated[str, Depends(oauth2_scheme)]):
     process_new_nodes(graph_name, item)
-    # return {"Hello": "World"}
     return True
 
 @app.get("/get_graph/{graph_name}", response_class=PlainTextResponse)
@@ -80,7 +81,6 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     
     token = auth.encode_token(res_usr.username)
     return {"access_token": token, "token_type": "bearer"}
-
 
 
 

@@ -10,7 +10,7 @@ class Triple(BaseModel):
 
 class TripleList(BaseModel):
     triples:list[Triple]
-    namespaces:dict[str,str]
+    namespaces:dict[str,str] = {}
 
 
 

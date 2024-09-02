@@ -1,13 +1,9 @@
 
-from rdflib import Graph, Literal
-from rdflib.namespace import CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG, OWL, \
-                           PROF, PROV, RDF, RDFS, SDO, SH, SKOS, SOSA, SSN, TIME, \
-                           VOID, XMLNS, XSD, URIPattern
 import requests
-from rdf_api.datastructure.triple_structure import TripleList, Triple
-from rdf_api.read_query import run_query
-from rdf_api.datastructure.query_structure import Query 
 
+from rdf_api.datastructure.query_structure import Query
+from rdf_api.datastructure.triple_structure import Triple, TripleList
+from rdf_api.read_query import run_query
 
 q = Query(
 query = """

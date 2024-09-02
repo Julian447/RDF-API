@@ -1,8 +1,6 @@
-from rdflib import Graph, URIRef, BNode, Literal
-from rdflib import Namespace
+from rdflib import BNode, Graph, Literal, Namespace, URIRef
+
 from rdf_api.datastructure.triple_structure import Triple, TripleList
-
-
 
 
 def check_graph_exist(graph_name: str):
@@ -13,10 +11,8 @@ def check_graph_exist(graph_name: str):
         with open(f'graphs/{graph_name}.ttl', 'x') as graph: 
             graph.write("") # create an empty file to not interfere with later additions 
             print(f"The file '{graph_name}' has been created")
-        # return True
     except FileExistsError: 
         print(f"The file '{graph_name}' already exists.")
-        # return False
     
 
 def process_new_nodes(graph_name:str, triples:TripleList):

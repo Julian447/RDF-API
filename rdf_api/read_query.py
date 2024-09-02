@@ -1,5 +1,7 @@
-import rdflib.graph 
+import rdflib.graph
+
 from rdf_api.datastructure.query_structure import Query
+
 
 # implement search through graph names
 # keep a document with all paths of all graphs in use

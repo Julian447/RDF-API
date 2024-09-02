@@ -1,13 +1,9 @@
 from datetime import datetime, timedelta, timezone
-from typing import Annotated, Optional
-from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.responses import PlainTextResponse
-from fastapi.security import OAuth2PasswordBearer
-import jwt
-from jwt.exceptions import InvalidTokenError
-from passlib.context import CryptContext
-from pydantic import BaseModel
+from typing import Optional
 
+import jwt
+from fastapi import HTTPException, status
+from jwt.exceptions import InvalidTokenError
 
 
 class Authentication:

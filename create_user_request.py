@@ -1,13 +1,14 @@
 
-from rdflib import Graph, Literal, URIRef
 import rdflib
-from rdflib.namespace import CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG, OWL, \
-                           PROF, PROV, RDF, RDFS, SDO, SH, SKOS, SOSA, SSN, TIME, \
-                           VOID, XMLNS, XSD, NamespaceManager, URIPattern
 import requests
-from rdf_api.datastructure.triple_structure import TripleList, Triple
-from rdf_api.create_query import process_new_nodes
+from rdflib import Graph, Literal, URIRef
+from rdflib.namespace import (CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG,
+                              OWL, PROF, PROV, RDF, RDFS, SDO, SH, SKOS, SOSA,
+                              SSN, TIME, VOID, XMLNS, XSD, NamespaceManager,
+                              URIPattern)
 
+from rdf_api.create_query import process_new_nodes
+from rdf_api.datastructure.triple_structure import Triple, TripleList
 
 usr = "file://users.ttl/"
 

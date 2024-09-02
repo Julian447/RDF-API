@@ -1,6 +1,7 @@
 import requests
+
+from rdf_api.datastructure.query_structure import Query
 from rdf_api.read_query import run_query
-from rdf_api.datastructure.query_structure import Query 
 
 q = Query(
 query = """

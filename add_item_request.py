@@ -1,14 +1,10 @@
 
-from rdflib.namespace import CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG, OWL, \
-                           PROF, PROV, RDF, RDFS, SDO, SH, SKOS, SOSA, SSN, TIME, \
-                           VOID, XMLNS, XSD, URIPattern
 import requests
-from rdf_api.datastructure.triple_structure import TripleList, Triple
+from rdflib.namespace import (CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG,
+                              OWL, PROF, PROV, RDF, RDFS, SDO, SH, SKOS, SOSA,
+                              SSN, TIME, VOID, XMLNS, XSD, URIPattern)
 
-
-
-
-
+from rdf_api.datastructure.triple_structure import Triple, TripleList
 
 graph_name = "test"
 graph_path = f'file://{graph_name}/' 
