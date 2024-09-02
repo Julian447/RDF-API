@@ -1,8 +1,6 @@
-from rdflib import Graph, URIRef, BNode, Literal
-from rdflib import Namespace
+from rdflib import BNode, Graph, Literal, Namespace, URIRef
+
 from rdf_api.datastructure.triple_structure import Triple, TripleList
-
-
 
 
 def check_graph_exist(graph_name: str):
@@ -13,31 +11,34 @@ def check_graph_exist(graph_name: str):
         with open(f'graphs/{graph_name}.ttl', 'x') as graph: 
             graph.write("") # create an empty file to not interfere with later additions 
             print(f"The file '{graph_name}' has been created")
-        # return True
     except FileExistsError: 
         print(f"The file '{graph_name}' already exists.")
-        # return False
     
 
 def process_new_nodes(graph_name:str, triples:TripleList):
     #create graph with the changes
-    g = Graph()
+    g = Graph(bind_namespaces="rdflib")
 
     check_graph_exist(graph_name)
     g.parse(f'graphs/{graph_name}.ttl')
-
+    
+    # make sure all needed namespaces are present
+    for prefix in triples.namespaces.keys():
+        g.bind(prefix=prefix,namespace=triples.namespaces[prefix])
+    
     for triple in triples.triples:
  
-        s = Namespace(triple.sub_namespace)
-        g.bind(triple.sub_namespace_prefix, s)
-        o = Namespace(triple.obj_namespace)
-        g.bind(triple.obj_namespace_prefix, o)
-
-        sub = URIRef(f'{triple.sub_namespace}{triple.sub}')
+        if triple.sub_is_literal:
+            sub = Literal(triple.sub, datatype=triple.obj_is_literal)
+        else:
+            sub = URIRef(f'{triple.sub}')
 
         pred = URIRef(triple.pred)
-
-        obj = URIRef(f'{triple.obj_namespace}{triple.obj}')
+        
+        if triple.obj_is_literal:
+            obj = Literal(triple.obj, datatype=triple.obj_is_literal)
+        else:
+            obj = URIRef(f'{triple.obj}')
 
         g.add((sub,pred,obj))
         g.print()
