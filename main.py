@@ -30,11 +30,13 @@ async def test():
 
 @app.post("/{graph_name}/create_item/")
 async def create_item(graph_name : str, item: TripleList, token: Annotated[str, Depends(oauth2_scheme)]):
+    # use token for user group authentication
     process_new_nodes(graph_name, item)
     return True
 
 @app.get("/get_graph/{graph_name}", response_class=PlainTextResponse)
 async def get_static_graph(graph_name : str, token: Annotated[str, Depends(oauth2_scheme)]):
+    # use token for user group authentication
     return get_graph(graph_name)
 
 
@@ -42,45 +44,48 @@ async def get_static_graph(graph_name : str, token: Annotated[str, Depends(oauth
 #!      Need to set up custom objects which return only desired output (i.e. subject predicate or object)
 @app.post("/{graph_name}/get_item/")
 async def get_item(graph_name: str, query : Query, token: Annotated[str, Depends(oauth2_scheme)]):
+    # use token for user group authentication
     # auth.auth(token)
     res = run_query(graph_name, query)
     # print(res.serialize(format="json"))
     return res
 
-@app.get("/list_graphs")
-async def list_graphs():
-    return {"Hello": "World"}
-
-
 @app.post("/token")
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+    # add usergroup to token
     data = UserInDB(username=form_data.username, hashed_password=form_data.password)
-    q = Query(
-    query = """
-
-        PREFIX usr: <file://users.ttl/> 
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
-
-        SELECT * WHERE {
-            usr:username a usr:User ;
-                usr:name ?usrname ;
-                usr:password ?passwd
-        }
-        """.replace("username", data.username)
-    )
-    res = run_query("users",q)
-    
-    # define response user
-    res_usr = UserInDB(username="", hashed_password="")
-    for row in res:
-        print(f'Login attempt from User: {row.usrname}')
-        res_usr = UserInDB(username=row.usrname, hashed_password=row.passwd)
+    res_usr = get_user(form_data.username)
 
     if not (data == res_usr):
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     
     token = auth.encode_token(res_usr.username)
     return {"access_token": token, "token_type": "bearer"}
+
+
+def get_user(username: str) -> UserInDB:
+    q = Query(
+    query = """
+        PREFIX : <file://users.ttl/>
+        PREFIX usr: <file://users_definition.ttl/> 
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+        SELECT * WHERE {
+            :username a usr:User ;
+                usr:name ?usrname ;
+                usr:password ?passwd
+        }
+        """.replace("username", username)
+    )
+    res = run_query(graphname="users",query=q,graph_path="users")
+    
+    # define response user
+    res_usr = UserInDB(username="", hashed_password="")
+    for row in res:
+        print(f'Login attempt from User: {row.usrname}')
+        res_usr = UserInDB(username=row.usrname, hashed_password=row.passwd)
+    
+    return res_usr
 
 
 
