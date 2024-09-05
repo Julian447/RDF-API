@@ -4,11 +4,6 @@
 
 usr:User a rdfs:Class .
 
-usr:Nistec a usr:User ;
-    usr:name "Nistec"^^xsd:string ;
-    usr:password "hashedtest"^^xsd:string ;
-    usr:passwordHash "hashed"^^xsd:string .
-
 usr:name a rdfs:Property ;
     rdfs:domain usr:User ;
     rdfs:range xsd:string .
