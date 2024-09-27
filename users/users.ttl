@@ -2,8 +2,8 @@
 @prefix usr: <file://users_definition.ttl/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:Nistec a usr:User ;
-    usr:name "Nistec"^^xsd:string ;
+:testUser a usr:User ;
+    usr:name "testUser"^^xsd:string ;
     usr:password "hashedtest"^^xsd:string ;
     usr:passwordHash "hashed"^^xsd:string .
 

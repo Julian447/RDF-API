@@ -21,7 +21,7 @@ env = dotenv_values(".env")
 
 auth = Authentication(env)
 
-
+#!!!!!!! NEED BETTER FAILURE RESPONSES
 
 
 @app.get("/", response_class=PlainTextResponse)
@@ -31,8 +31,18 @@ async def test():
 @app.post("/{graph_name}/create_item/")
 async def create_item(graph_name : str, item: TripleList, token: Annotated[str, Depends(oauth2_scheme)]):
     # use token for user group authentication
-    process_new_nodes(graph_name, item)
-    return True
+    if process_new_nodes(graph_name, item):
+        return {"success": True}
+    else:
+        return {"success": False}
+
+@app.post("/{graph_name}/create_item/{path}")
+async def create_item_with_path(graph_name : str, item: TripleList, path:str, token: Annotated[str, Depends(oauth2_scheme)]):
+    # use token for user group authentication
+    if process_new_nodes(graph_name, item, path):
+        return {"success": True}
+    else:
+        return {"success": False}
 
 @app.get("/get_graph/{graph_name}", response_class=PlainTextResponse)
 async def get_static_graph(graph_name : str, token: Annotated[str, Depends(oauth2_scheme)]):
