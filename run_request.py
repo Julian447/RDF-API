@@ -12,7 +12,7 @@ from rdf_api.datastructure.query_structure import Query
 from rdf_api.read_query import run_query
 from rdf_api.create_query import process_new_nodes
 from rdf_api.datastructure.triple_structure import Triple, TripleList
-
+import json
 
 def get_token():
     token_headers = {
@@ -22,7 +22,7 @@ def get_token():
 
     token_data = {
         'grant_type': 'password',
-        'username': 'Nistec',
+        'username': 'testUser',
         'password': 'hashedtest',
         'scope': '',
         'client_id': 'string',
@@ -76,14 +76,14 @@ def add_item():
     t : list[Triple] = [t1,t2,t3,t4]
     ns = {"g" : graph_path, "g1": graph_path1, "g2": graph_path2}
 
-    json = TripleList(triples=t, namespaces=ns).model_dump_json()
+    j = TripleList(triples=t, namespaces=ns).model_dump_json()
 
     token = get_token()
 
     # print(test)
     # r = requests.post("http://0.0.0.0:5000/test/create_item", test)
 
-    r = requests.post("http://0.0.0.0:5000/test/create_item/", data=json, 
+    r = requests.post("http://0.0.0.0:5000/test/create_item/", data=j, 
                       headers= {
                       "Authorization": f"Bearer {token}"
                       })
@@ -91,7 +91,7 @@ def add_item():
     print(r.json())
 
 def create_user():
-    name = "Nistec"
+    name = "testUser"
     password = "hashedtest"
     hash = "hashed"
     
@@ -170,26 +170,31 @@ def read_item():
         PREFIX log: <http://example.org/ont/transaction-log/> 
         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
 
-        SELECT DISTINCT ?c ?b WHERE {
+        SELECT DISTINCT ?b ?c WHERE {
             ?a ?c ?b .
         }
         """.replace("?a", "txn:123")
     )
 
-    json = q.model_dump_json()
+    j = q.model_dump_json()
 
 
     token = get_token()
 
-    r = requests.post("http://0.0.0.0:5000/graphtest/get_item/", data=json, 
+    r = requests.post("http://0.0.0.0:5000/graphtest/get_item/", data=j, 
                       headers= {
                       "Authorization": f"Bearer {token}"
                       })
-    print(r)
-    print(r.json())
+    # print(r)
+    # print(json.dumps(r.json(), indent=4))
+    g = Graph()
+    g.parse(r.json(), format="json-ld")
+    # t = g.serialize(format='ttl')
+    print(g.serialize())
+    # print(t)
 
 
-# read_item()
+read_item()
 # add_item()
-find_user("Nistec")
+# find_user("testUser")
 # create_user()
