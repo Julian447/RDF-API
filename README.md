@@ -1,5 +1,6 @@
-# RDF-API-Tool
-An self hosted API toolfor using RDF as database
+# RDF-API
+A self hosted API tool for using RDF as a remote database
+This is a project meant to experiment with handling the transmitting RDF through HTTP  
 
 ## Setup
 Run the "setup.sh" script or use the following commands:
